@@ -1,26 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "./App.css";
+import InputanUang from "./InputanUang";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const BASE_URL = "https://api.exchangeratesapi.io/latest";
+
+class App extends React.Component {
+  state = {
+    tukarUangOption: []
+  };
+
+  componentDidMount() {
+    fetch(BASE_URL)
+      .then(response => response.json())
+      .then(data => {
+        this.setState({
+          tukarUangOption: [data.base, ...Object.keys(data.rates)]
+        });
+      });
+  }
+
+  render() {
+    console.log(this.state.tukarUangOption);
+    return (
+      <React.Fragment>
+        <h1> Monney Charger</h1>
+        <InputanUang tukarUangOption={this.state.tukarUangOption} />
+        <h1> =</h1>
+        <InputanUang tukarUangOption={this.state.tukarUangOption} />
+      </React.Fragment>
+    );
+  }
 }
 
 export default App;
